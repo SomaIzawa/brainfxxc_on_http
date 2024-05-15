@@ -1,0 +1,138 @@
+html, body {
+  width: 100vw;
+  height: 100vh;
+  font-family: "Noto Sans JP", sans-serif;
+  color: rgb(39, 39, 39);
+}
+
+header {
+  width: 100%;
+  height: 56px;
+  background-color: rgb(39, 39, 39);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+}
+
+h1 {
+  color: white;
+  font-family: "Source Code Pro", monospace;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+h1 > i {
+  font-size: 21px;
+  margin-right: 8px;
+}
+
+main {
+  height: calc(100vh - 128px);
+  padding: 32px 32px;
+}
+
+.title-box {
+  display: flex;
+  padding: 16px 0;
+}
+
+.title-box > h2 {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.title-box > h2 > i {
+  margin-right: 8px;
+}
+
+.title-box > p {
+  padding-left: 16px;
+  font-size: 16px;
+  font-weight: 200;
+}
+
+button {
+  width: 100%;
+  height: 40px;
+  border: 2px solid rgb(39, 39, 39);
+  margin: 16px 0;
+  font-size: 16px;
+  font-family: "Source Code Pro", monospace;
+  background-color: white;
+  color: rgb(39, 39, 39);
+  cursor: pointer;
+  transition: background-color .2s, color .2s;
+}
+
+button:hover{
+  background-color: rgb(39, 39, 39);
+  color: white;
+}
+
+textarea, #result{
+  width: 100%;
+  height: 160px;
+  background-color: rgb(39, 39, 39);
+  color: white;
+  font-family: "Source Code Pro", monospace;
+  padding: 16px;
+  border: none;
+  resize: none;
+  outline: none;
+  border-radius: 8px;
+}
+
+#result {
+  overflow-wrap: break-word;
+  overflow-y: scroll;
+  vertical-align: middle;
+}
+
+footer {
+  width: 100%;
+  height: 72px;
+  padding: 0 32px;
+  background-color: rgb(39, 39, 39);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex {
+  display: flex;
+}
+
+.center {
+  justify-content: center;
+}
+
+.fa-chevron-down {
+  margin: 8px 0;
+  font-size: 24px;
+}
+
+#result_output {
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+#cursor {
+  background-color: white;
+  display: block;
+  height: 16px;
+  width: 8px;
+  animation: blink 1s infinite step-end;
+}
+
+@keyframes blink {
+  0% {
+    background-color: white; 
+  }
+  50% {
+    background-color: rgb(39, 39, 39);
+  }
+  100% {
+    background-color: white;
+  }
+}

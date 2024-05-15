@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="reset.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
+  <link rel="icon" href="brain-solid.ico" id="favicon">
+  <title>RunBrainFxxk</title>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-brain"></i>Run_Brain_Fxxk</h1>
+  </header>
+  <main>
+    <div class="title-box">
+      <h2><i class="fas fa-pen"></i>Input</h2>
+      <p>Please Input Code !!（Commas " , " cannot be used）</p>
+    </div>
+    <textarea name="code" id="code" placeholder="e.g. +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+.+.>++++++++++."></textarea>
+    <button id="button">Go run</button>
+    <div class="flex center">
+      <i class="fas fa-chevron-down"></i>
+    </div>
+    <div class="title-box">
+      <h2><i class="fas fa-terminal"></i>Result</h2>
+      <p id="status"></p>
+    </div>
+    <div id="result">
+      <span id="result_output"></span><span id="cursor"></span>
+    </div>
+  </main>
+  <footer>
+    © All rights reserved by izawasoma
+  </footer>
+</body>
+<script>
+  const button = document.getElementById("button")
+  const result = document.getElementById("result_output")
+  const status = document.getElementById("status")
+  const getFormValue = (id) => {
+    const form = document.getElementById(id)
+    return form.value
+  }
+  const sendReq = async () => {
+    status.textContent = ""
+    const code = getFormValue("code")
+    const body = {"code": code}
+    const res = await fetch("/run", { 
+      method: "POST", 
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body) 
+    })
+    if(res.status === 200){
+      const text = await res.text()
+      result.textContent = text
+      status.textContent = "Success: 200 OK"
+      status.style.color = "rgb(78, 220, 70)"
+    }
+    else if(res.status === 403){
+      const text = await res.text()
+      result.textContent = text
+      status.textContent = "Failed: 403 Error"
+      status.style.color = "rgb(255, 73, 73)"
+    }
+  }
+  button.addEventListener("click", sendReq)
+</script>
+</html>
