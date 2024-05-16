@@ -23,7 +23,11 @@
       <p>Please Input Code !!（Commas " , " cannot be used）</p>
     </div>
     <textarea name="code" id="code" placeholder="e.g. +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+.+.>++++++++++."></textarea>
-    <button id="button">Go run</button>
+    <div class="button-area">
+      <button id="button" class="button button-wide">Go run</button>
+      <input type="file" id="fileinput" name="file">
+      <label for="fileinput" class="button button-short">Upload</label>
+    </div>
     <div class="flex center">
       <i class="fas fa-chevron-down"></i>
     </div>
@@ -43,9 +47,24 @@
   const button = document.getElementById("button")
   const result = document.getElementById("result_output")
   const status = document.getElementById("status")
+  const fileinput = document.getElementById("fileinput")
   const getFormValue = (id) => {
     const form = document.getElementById(id)
     return form.value
+  }
+  const resMethod = async (res) => {
+    if(res.status === 200){
+      const text = await res.text()
+      result.textContent = text
+      status.textContent = "Success: 200 OK"
+      status.style.color = "rgb(78, 220, 70)"
+    }
+    else if(res.status === 403 || res.status === 500 || res.status === 400){
+      const text = await res.text()
+      result.textContent = text
+      status.textContent = `Failed: ${res.status} Error`
+      status.style.color = "rgb(255, 73, 73)"
+    }
   }
   const sendReq = async () => {
     status.textContent = ""
@@ -58,19 +77,24 @@
       },
       body: JSON.stringify(body) 
     })
-    if(res.status === 200){
-      const text = await res.text()
-      result.textContent = text
-      status.textContent = "Success: 200 OK"
-      status.style.color = "rgb(78, 220, 70)"
+    await resMethod(res)
+  }
+  const onSetFile = async () => {
+    const file = fileinput.files[0]
+    if(!file){
+      alert("file is not selected")
+      return;
     }
-    else if(res.status === 403){
-      const text = await res.text()
-      result.textContent = text
-      status.textContent = "Failed: 403 Error"
-      status.style.color = "rgb(255, 73, 73)"
-    }
+    const formData = new FormData();
+    formData.append('codefile', file);
+
+    const res = await fetch("/run-by-file", { 
+      method: "POST", 
+      body: formData
+    });
+    await resMethod(res)
   }
   button.addEventListener("click", sendReq)
+  fileinput.addEventListener("change", onSetFile)
 </script>
 </html>
