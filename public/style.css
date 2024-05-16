@@ -66,6 +66,10 @@ main {
   transition: background-color .2s, color .2s;
 }
 
+.button > i {
+  margin-right: 8px;
+}
+
 .button-area {
   display: flex;
   justify-content: space-between;

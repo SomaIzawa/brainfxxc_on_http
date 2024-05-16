@@ -24,9 +24,9 @@
     </div>
     <textarea name="code" id="code" placeholder="e.g. +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.+.+.>++++++++++."></textarea>
     <div class="button-area">
-      <button id="button" class="button button-wide">Go run</button>
+      <button id="button" class="button button-wide"><i class="fas fa-cog"></i>Go run</button>
       <input type="file" id="fileinput" name="file">
-      <label for="fileinput" class="button button-short">Upload</label>
+      <label for="fileinput" class="button button-short"><i class="fas fa-upload"></i>Upload</label>
     </div>
     <div class="flex center">
       <i class="fas fa-chevron-down"></i>
@@ -44,14 +44,12 @@
   </footer>
 </body>
 <script>
+  const form = document.getElementById("code")
   const button = document.getElementById("button")
   const result = document.getElementById("result_output")
   const status = document.getElementById("status")
   const fileinput = document.getElementById("fileinput")
-  const getFormValue = (id) => {
-    const form = document.getElementById(id)
-    return form.value
-  }
+
   const resMethod = async (res) => {
     if(res.status === 200){
       const text = await res.text()
@@ -68,7 +66,7 @@
   }
   const sendReq = async () => {
     status.textContent = ""
-    const code = getFormValue("code")
+    const code = form.value
     const body = {"code": code}
     const res = await fetch("/run", { 
       method: "POST", 
@@ -92,6 +90,7 @@
       method: "POST", 
       body: formData
     });
+    form.value = ""
     await resMethod(res)
   }
   button.addEventListener("click", sendReq)

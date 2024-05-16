@@ -1,9 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"http_on_brainfxxk/brainfxxk"
 	"io/ioutil"
 	"net/http"
+	"path/filepath"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 )
@@ -45,6 +48,11 @@ func PostFileHandler(c echo.Context) error {
 	file, err := c.FormFile("codefile")
 	if err != nil {
 		return c.String(http.StatusBadRequest, err.Error())
+	}
+	extension := filepath.Ext(file.Filename)
+	extension = strings.TrimPrefix(extension, ".")
+	if extension != "bf" {
+		return c.String(http.StatusBadRequest, fmt.Errorf("unsupported file format").Error())
 	}
 	src, err := file.Open()
 	if err != nil {
