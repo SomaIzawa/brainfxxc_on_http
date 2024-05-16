@@ -2,6 +2,7 @@ package main
 
 import (
 	"http_on_brainfxxk/brainfxxk"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
@@ -14,6 +15,7 @@ func main(){
 
 	e.GET("/" , GetHandler)
 	e.POST("/run" , PostHandler)
+	e.POST("/run-by-file", PostFileHandler)
 	e.Logger.Fatal(e.Start(":8080"))
 }
 
@@ -32,7 +34,30 @@ func PostHandler(c echo.Context) error {
 	}
 	
 	// brainfxxk
-	bf := brainfxxk.NewParser(req.Code, 128, 10000)
+	bf := brainfxxk.NewParser(req.Code, 128, 100000)
+	if err := bf.Exec(); err != nil {
+		return c.String(http.StatusForbidden, err.Error())
+	}
+	return c.String(http.StatusOK, bf.OutputString)
+}
+
+func PostFileHandler(c echo.Context) error {
+	file, err := c.FormFile("codefile")
+	if err != nil {
+		return c.String(http.StatusBadRequest, err.Error())
+	}
+	src, err := file.Open()
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+	defer src.Close()
+
+	content, err := ioutil.ReadAll(src)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	bf := brainfxxk.NewParser(string(content), 128, 100000)
 	if err := bf.Exec(); err != nil {
 		return c.String(http.StatusForbidden, err.Error())
 	}
